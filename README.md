@@ -1,5 +1,8 @@
 # 📊 Telco Customer Churn Prediction
 
+
+A machine learning analysis to predict telecom customer churn and identify key drivers of customer retention.
+
 **Goal:** Predict which telecom customers are most likely to leave using demographic and contract-related data.
 
 
@@ -25,6 +28,8 @@ I built two models — Logistic Regression and XGBoost — to predict customer c
 
 ## 📈 Key Results
 
+Both models achieved strong performance (ROC-AUC ≈ 0.85). Logistic Regression offered slightly better interpretability, while XGBoost achieved marginally higher recall after tuning.
+
 | Model               | ROC-AUC | Best Threshold | Recall | Precision |
 | ------------------- | ------- | -------------- | ------ | --------- |
 | Logistic Regression | 0.84    | 0.3            | 0.75   | 0.52      |
@@ -36,8 +41,6 @@ I built two models — Logistic Regression and XGBoost — to predict customer c
 Below are the ROC and Precision–Recall curves for both models, illustrating their classification performance.
 
 <img src="outputs/figures/roc_pr_curves.png" width="500">
-
-
 
 
 
@@ -62,8 +65,6 @@ Below are the ROC and Precision–Recall curves for both models, illustrating th
 </tr>
 </table>
 
-
-
 ## 🗣️ Insights
 
 - Month-to-month contracts and higher bills strongly correlate with churn.
@@ -80,6 +81,7 @@ Below are the ROC and Precision–Recall curves for both models, illustrating th
 - Jupyter Notebook
 
 ## 📥 Data Source
+
 The dataset used in this project is publicly available from IBM on [Kaggle: Telco Customer Churn Dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
 
 To reproduce the analysis:
@@ -92,7 +94,16 @@ To reproduce the analysis:
 
 <pre>data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
 
+_Note:_ Raw data is not included in this repository to keep it lightweight and comply with dataset licensing.
+
 ## 🧩 How to Run
 
 <pre>bash pip install -r requirements.txt 
 jupyter notebook notebooks/01_churn_analysis.ipynb</pre>
+
+## 📬 Author
+
+**Mehdi Zaghdoudi**
+
+📧 [Email](mailto:zaghdoudi.mehdi@gmail.com)
+💼 [LinkedIn](https://www.linkedin.com/in/mehdizaghdoudi/)
