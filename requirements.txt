@@ -1,21 +1,14 @@
-# requirements.txt
-# Telco Churn Prediction Project
-# Run: pip install -r requirements.txt
+streamlit>=1.33,<2
+pandas>=2.1,<3
+numpy>=1.26,<2.1
+scikit-learn>=1.3,<1.6
+scipy>=1.10,<1.14
+plotly>=5.20,<7
+statsmodels>=0.14,<0.15
+patsy>=0.5
 
 
-
-
-# Core libraries
-pandas==2.3.2
-numpy==2.0.1
-scikit-learn==1.5.1
-matplotlib==3.10.6
-seaborn==0.13.2
-
-# Advanced models / explanations
-xgboost==3.0.5
-shap==0.48.0
-
-# Notebook and visualization
-jupyter==1.1.1
-streamlit==1.50.0
+# --- Optional extras (if you want to test the notebook) ---
+# xgboost>=2.0,<3
+# shap>=0.45,<0.49
+# pyarrow>=14,<17

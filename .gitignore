@@ -1,0 +1,62 @@
+# ==============================
+# Telco Churn Project .gitignore
+# ==============================
+
+# --- Python cache & environments ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+env/
+venv/
+.env
+.ipynb_checkpoints/
+
+# --- Jupyter Notebook checkpoints ---
+*/.ipynb_checkpoints/*
+
+# --- Data files ---
+# Ignore raw and intermediate data to keep repo lightweight
+data/raw/*
+data/interim/*
+data/processed/*
+
+# Keep folder structure visible
+!data/.gitkeep
+!data/README.md
+
+# --- Outputs & figures ---
+outputs/models/*
+outputs/temp/*
+outputs/*.csv
+outputs/*.xlsx
+outputs/*.pkl
+outputs/*.joblib
+outputs/*.json
+outputs/*.html
+
+# Keep only the figures for visuals
+!outputs/figures/
+!outputs/figures/*.png
+
+# --- Logs ---
+*.log
+
+# --- System / Editor junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Conda / pip files ---
+*.yml
+*.yaml
+Pipfile
+Pipfile.lock
+
+# --- Miscellaneous ---
+# Ignore anything temporary
+*.bak
+*.tmp
