@@ -279,7 +279,7 @@ with extra:
 # -----------------------------
 # Tabs
 # -----------------------------
-TAB_OVERVIEW, TAB_COHORTS, TAB_MODEL, TAB_SCORE = st.tabs(["Overview", "Cohorts", "Modeling", "Score & Export CSV"]) 
+TAB_OVERVIEW, TAB_COHORTS, TAB_MODEL, TAB_SCORE = st.tabs(["Overview", "Cohorts", "Modeling", "Score & Export CSV"])
 
 with TAB_OVERVIEW:
     st.subheader("Distributions")
@@ -288,12 +288,22 @@ with TAB_OVERVIEW:
         options=[c for c in fdf.columns if c not in [ID_COL]],
         default=[c for c in ["Contract", "InternetService", "PaymentMethod", "MonthlyCharges", "tenure"] if c in fdf.columns]
     )
+
+    name_map = {
+    "Contract": "contract types",
+    "InternetService": "internet service types",
+    "PaymentMethod": "payment methods",
+    "MonthlyCharges": "monthly charges",
+    "tenure": "tenure (months)"
+    }
+    
     for col in cols_plot:
         if pd.api.types.is_numeric_dtype(fdf[col]):
             fig = px.histogram(fdf, x=col, color=TARGET_COL if TARGET_COL in fdf.columns else None, nbins=40, marginal="box")
         else:
             fig = px.histogram(fdf, x=col, color=TARGET_COL if TARGET_COL in fdf.columns else None)
-        fig.update_layout(title=f"Distribution of {col}")
+        fig.update_layout(title=f"Distribution of {name_map.get(col, col)}",
+                          xaxis_title=name_map.get(col, col))
         st.plotly_chart(fig, use_container_width=True)
 
 with TAB_COHORTS:
@@ -310,8 +320,9 @@ with TAB_COHORTS:
 
     st.subheader("Monthly Charges vs Tenure")
     if all(c in fdf.columns for c in ["MonthlyCharges","tenure"]):
-        # Drop rows with NaN before fitting OLS trendline to avoid statsmodels NaN errors
+        # Drop rows with NaN before fitting
         fdf_scatter = fdf.dropna(subset=["MonthlyCharges", "tenure"]).copy()
+        
         if len(fdf_scatter) >= 3:
             fig = px.scatter(
                 fdf_scatter,
@@ -320,6 +331,9 @@ with TAB_COHORTS:
                 color=TARGET_COL if TARGET_COL in fdf_scatter.columns else None,
                 hover_data=[ID_COL] if ID_COL in fdf_scatter.columns else None,
                 trendline="ols",
+                marginal_x="histogram",
+                marginal_y="histogram",
+                opacity=0.6
             )
         else:
             fig = px.scatter(
@@ -329,7 +343,12 @@ with TAB_COHORTS:
                 color=TARGET_COL if TARGET_COL in fdf_scatter.columns else None,
                 hover_data=[ID_COL] if ID_COL in fdf_scatter.columns else None,
             )
-        fig.update_layout(xaxis_title="Tenure (months)", yaxis_title="Monthly Charges")
+        
+        fig.update_layout(
+            xaxis_title="Tenure (months)", 
+            yaxis_title="Monthly Charges ($)",
+            height=500
+        )
         st.plotly_chart(fig, use_container_width=True)
 
 with TAB_MODEL:
