@@ -6,14 +6,14 @@ A machine learning analysis to predict telecom customer churn and identify key d
 
 ## 🧠 Overview
 
-This project explores the IBM Telco Customer Churn dataset.
+This project explores the IBM Telco Customer Churn dataset.  
 I built two models — Logistic Regression and XGBoost — to predict customer churn and identify the main drivers behind it.
 
 ## ⚙️ Workflow
 
-1. **Data cleaning:** handled missing TotalCharges, encoded categorical features.
-2. **Modeling:** baseline Logistic Regression + tuned XGBoost with threshold optimization.
-3. **Evaluation:** compared accuracy, ROC-AUC, precision, recall across thresholds.
+1. **Data cleaning:** handled missing TotalCharges, encoded categorical features.  
+2. **Modeling:** baseline Logistic Regression + tuned XGBoost with threshold optimization.  
+3. **Evaluation:** compared accuracy, ROC-AUC, precision, recall across thresholds.  
 4. **Interpretation:** visualized feature importances and extracted actionable business insights.
 
 ## 📈 Key Results
@@ -54,14 +54,14 @@ Below are the ROC and Precision–Recall curves for both models, illustrating th
 
 ## 🗣️ Insights
 
-- Month-to-month contracts and higher bills strongly correlate with churn.
-- Long-term customers and DSL users show much higher retention.
+- Month-to-month contracts and higher bills strongly correlate with churn.  
+- Long-term customers and DSL users show much higher retention.  
 - Optimizing retention should focus on promoting longer contracts and lower-cost plans.
 
 ## 💻 Tech Stack
 
-- Python (pandas, scikit-learn, matplotlib, seaborn, xgboost, shap)
-- Jupyter Notebook
+- Python (pandas, scikit-learn, matplotlib, seaborn, xgboost, shap)  
+- Jupyter Notebook  
 - Streamlit
 
 ## 📥 Data Source
@@ -70,13 +70,11 @@ The dataset used in this project is publicly available from IBM on [Kaggle: Telc
 
 To reproduce the analysis:
 
-1. Download the dataset file named
+1. Download the dataset file named  
+   <pre>WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
 
-<pre>WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
-
-2. Place it in this directory:
-
-<pre>data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
+2. Place it in this directory:  
+   <pre>data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
 
 _Note:_ Raw data is not included in this repository to keep it lightweight and comply with dataset licensing.
 
@@ -85,14 +83,16 @@ _Note:_ Raw data is not included in this repository to keep it lightweight and c
 <pre>bash pip install -r requirements.txt 
 jupyter notebook notebooks/01_churn_analysis.ipynb</pre>
 
-## 💻 Interactive streamlit App
+## 💻 Interactive Streamlit App
 
 Run the interactive dashboard (uses the same dataset path as above by default):
 
 <pre>streamlit run app.py</pre>
 
-Upload your own CSV in the sidebar **or** keep the default:
-  <pre>data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
+Or explore the **deployed live version here 👉 [Telco Churn Dashboard (Streamlit App)](https://uyrnmft6syhsh8nax5k3wg.streamlit.app/)**
+
+Upload your own CSV in the sidebar **or** keep the default:  
+<pre>data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv</pre>
 
 Tabs include EDA, cohort views, on-the-fly Logistic Regression training, and scoring with CSV export.
 
@@ -100,12 +100,12 @@ Tabs include EDA, cohort views, on-the-fly Logistic Regression training, and sco
 
 MIT License – Free to use and adapt for educational or research purposes.
 
-
 <p align="center">
   <strong>Mehdi Zaghdoudi</strong><br>
   👋 <strong>Data Scientist & Machine Learning Engineer</strong><br>
-  📍 Based in France 🇫🇷 &nbsp;|&nbsp; 🌐 Multilingual &nbsp;|&nbsp; 🧠 Focused on Applied NLP  
+  📍 Based in France 🇫🇷 &nbsp;|&nbsp; 🌐 Multilingual &nbsp;|&nbsp; 🧠 Interested in Applied NLP  
   <br><br>
   📧 <a href="mailto:zaghdoudi.mehdi@gmail.com">Email</a> &nbsp;|&nbsp;
-  💼 <a href="https://www.linkedin.com/in/mehdizaghdoudi/">LinkedIn</a>
+  💼 <a href="https://www.linkedin.com/in/mehdizaghdoudi/">LinkedIn</a>&nbsp;|&nbsp;
+  🔥 <a href="https://share.streamlit.io/user/zassoulich">Streamlit</a>
 </p>

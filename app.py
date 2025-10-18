@@ -33,6 +33,10 @@ DATA_DEFAULT_PATH = "data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv"
 TARGET_COL = "Churn"
 ID_COL = "customerID"
 
+# Fixed color mapping for churn visualization
+# No (not churned) = Blue, Yes (churned) = Red
+CHURN_COLOR_MAP = {"No": "#1f77b4", "Yes": "#d62728"}
+
 CATEGORICAL_COLS_DEFAULT = [
     "gender","SeniorCitizen","Partner","Dependents","PhoneService","MultipleLines",
     "InternetService","OnlineSecurity","OnlineBackup","DeviceProtection","TechSupport",
@@ -84,7 +88,7 @@ def load_data(path: str = DATA_DEFAULT_PATH, uploaded: pd.DataFrame | None = Non
     if "SeniorCitizen" in df.columns:
         # sometimes stored as 0/1 integers; ensure string for categorical if in cat list
         df["SeniorCitizen"] = df["SeniorCitizen"].astype(int)
-    # Drop rows where target is missing if present
+    # Drop rows where target is missing if present in dataframe
     if TARGET_COL in df.columns:
         df = df[~df[TARGET_COL].isna()]
     return df
@@ -116,7 +120,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 @st.cache_resource(show_spinner=False)
 def build_model(cat_cols: List[str], num_cols: List[str]) -> Pipeline:
-    # Preprocessor with robust imputation (fixes NaN issues on custom unporcessed CSVs)
+    # Preprocessor (fixes NaN issues on custom unporcessed CSVs)
     num_features = [c for c in num_cols if c in st.session_state.df.columns]
     cat_features = [c for c in cat_cols if c in st.session_state.df.columns]
 
@@ -156,13 +160,20 @@ def train_and_eval(df: pd.DataFrame, cat_cols: List[str], num_cols: List[str]) -
         if c in dfp.columns:
             dfp[c] = pd.to_numeric(dfp[c], errors="coerce")
 
-    # If user CSV encodes churn as 0/1 or yes/no with different case, normalize
-    if TARGET_COL in dfp.columns and dfp[TARGET_COL].dtype == object:
-        dfp[TARGET_COL] = dfp[TARGET_COL].str.strip().str.title().replace({"True":"Yes","False":"No","1":"Yes","0":"No"})
-
-    # y and X
+    # Standardize target column encoding
     if TARGET_COL in dfp.columns:
-        y = dfp[TARGET_COL].map({"Yes": 1, "No": 0}) if dfp[TARGET_COL].dtype == object else dfp[TARGET_COL]
+        # Normalize string labels to consistent case
+        if dfp[TARGET_COL].dtype == object:
+            dfp[TARGET_COL] = dfp[TARGET_COL].str.strip().str.title()
+            # Map Yes=1 (churned), No=0 (not churned)
+            y = dfp[TARGET_COL].map({"Yes": 1, "No": 0})
+        # Handle numeric encoding
+        elif pd.api.types.is_numeric_dtype(dfp[TARGET_COL]):
+            # Assume standard encoding: 1=churned, 0=not churned
+            y = dfp[TARGET_COL].astype(int)
+        else:
+            raise ValueError("Unexpected target format")
+        
         X = dfp.drop(columns=[TARGET_COL])
     else:
         raise ValueError("Target column 'Churn' not found")
@@ -299,9 +310,21 @@ with TAB_OVERVIEW:
     
     for col in cols_plot:
         if pd.api.types.is_numeric_dtype(fdf[col]):
-            fig = px.histogram(fdf, x=col, color=TARGET_COL if TARGET_COL in fdf.columns else None, nbins=40, marginal="box")
+            fig = px.histogram(
+                fdf, x=col, 
+                color=TARGET_COL if TARGET_COL in fdf.columns else None,
+                color_discrete_map=CHURN_COLOR_MAP if TARGET_COL in fdf.columns else None,
+                category_orders={TARGET_COL: ["No", "Yes"]} if TARGET_COL in fdf.columns else None,
+                nbins=40, 
+                marginal="box"
+            )
         else:
-            fig = px.histogram(fdf, x=col, color=TARGET_COL if TARGET_COL in fdf.columns else None)
+            fig = px.histogram(
+                fdf, x=col, 
+                color=TARGET_COL if TARGET_COL in fdf.columns else None,
+                color_discrete_map=CHURN_COLOR_MAP if TARGET_COL in fdf.columns else None,
+                category_orders={TARGET_COL: ["No", "Yes"]} if TARGET_COL in fdf.columns else None
+            )
         fig.update_layout(title=f"Distribution of {name_map.get(col, col)}",
                           xaxis_title=name_map.get(col, col))
         st.plotly_chart(fig, use_container_width=True)
@@ -329,6 +352,8 @@ with TAB_COHORTS:
                 x="tenure",
                 y="MonthlyCharges",
                 color=TARGET_COL if TARGET_COL in fdf_scatter.columns else None,
+                color_discrete_map=CHURN_COLOR_MAP if TARGET_COL in fdf_scatter.columns else None,
+                category_orders={TARGET_COL: ["No", "Yes"]} if TARGET_COL in fdf_scatter.columns else None,
                 hover_data=[ID_COL] if ID_COL in fdf_scatter.columns else None,
                 trendline="ols",
                 marginal_x="histogram",
@@ -341,6 +366,8 @@ with TAB_COHORTS:
                 x="tenure",
                 y="MonthlyCharges",
                 color=TARGET_COL if TARGET_COL in fdf_scatter.columns else None,
+                color_discrete_map=CHURN_COLOR_MAP if TARGET_COL in fdf_scatter.columns else None,
+                category_orders={TARGET_COL: ["No", "Yes"]} if TARGET_COL in fdf_scatter.columns else None,
                 hover_data=[ID_COL] if ID_COL in fdf_scatter.columns else None,
             )
         
